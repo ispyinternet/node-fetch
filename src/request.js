@@ -1,4 +1,3 @@
-
 /**
  * request.js
  *
@@ -27,6 +26,45 @@ function isRequest(input) {
 }
 
 /**
+ * Pre check for unix socket request
+ *
+ * Requests can also be sent via unix domain sockets.
+ * Use the following URL scheme:
+ *
+ * PROTOCOL://unix:SOCKET:PATH.
+ *
+ * PROTOCOL - http or https (optional)
+ * SOCKET - Absolute path to a unix domain socket, for example: /var/run/docker.sock
+ * PATH - Request path, for example: /v2/keys
+ *
+ */
+function pre_parse_url(url) {
+
+	let parsedURL;
+
+	url = url.replace(/^unix:/, 'http://$&');
+
+	let matches = url.match(/(^https?:)\/\/unix:(.+):(.*)/)
+
+	if (matches) {
+		// unix socket
+		let protocol = matches[1]
+		let socketPath = matches[2]
+		let path = `${protocol}//127.0.0.1${matches[3]}`
+
+		// parse as socket url
+		parsedURL = parse_url(path)
+		parsedURL.protocol = protocol
+		parsedURL.socketPath = socketPath
+
+	} else {
+		parsedURL = parse_url(url)
+	}
+
+	return parsedURL
+}
+
+/**
  * Request class
  *
  * @param   Mixed   input  Url or Request instance
@@ -43,14 +81,14 @@ export default class Request {
 				// in order to support Node.js' Url objects; though WHATWG's URL objects
 				// will fall into this branch also (since their `toString()` will return
 				// `href` property anyway)
-				parsedURL = parse_url(input.href);
+				parsedURL = pre_parse_url(input.href);
 			} else {
 				// coerce input to a string before attempting to parse
-				parsedURL = parse_url(`${input}`);
+				parsedURL = pre_parse_url(`${input}`);
 			}
 			input = {};
 		} else {
-			parsedURL = parse_url(input.url);
+			parsedURL = pre_parse_url(input.url);
 		}
 
 		let method = init.method || input.method || 'GET';
@@ -64,8 +102,8 @@ export default class Request {
 		let inputBody = init.body != null ?
 			init.body :
 			isRequest(input) && input.body !== null ?
-				clone(input) :
-				null;
+			clone(input) :
+			null;
 
 		Body.call(this, inputBody, {
 			timeout: init.timeout || input.timeout || 0,
@@ -197,6 +235,13 @@ export function getNodeRequestOptions(request) {
 	// HTTP-network fetch step 4.2
 	// chunked encoding is handled by Node.js
 
+	// if socketPath is set, remove host and port
+	// https://nodejs.org/api/http.html#http_http_request_url_options_callback
+
+	if (typeof parsedURL.socketPath == "string") {
+		delete parsedURL.host;
+		delete parsedURL.port;
+	}
 	return Object.assign({}, parsedURL, {
 		method: request.method,
 		headers: exportNodeCompatibleHeaders(headers),

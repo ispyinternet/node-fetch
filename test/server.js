@@ -5,7 +5,7 @@ import * as stream from 'stream';
 import { multipart as Multipart } from 'parted';
 
 let convert;
-try { convert = require('encoding').convert; } catch(e) {}
+try { convert = require('encoding').convert; } catch (e) {}
 
 export default class TestServer {
 	constructor() {
@@ -35,6 +35,7 @@ export default class TestServer {
 		let p = parse(req.url).pathname;
 
 		if (p === '/hello') {
+
 			res.statusCode = 200;
 			res.setHeader('Content-Type', 'text/plain');
 			res.end('world');

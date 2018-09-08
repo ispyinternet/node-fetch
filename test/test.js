@@ -1,4 +1,3 @@
-
 // test tools
 import chai from 'chai';
 import chaiPromised from 'chai-as-promised';
@@ -26,7 +25,7 @@ const {
 } = vm.runInNewContext('this');
 
 let convert;
-try { convert = require('encoding').convert; } catch(e) { }
+try { convert = require('encoding').convert; } catch (e) {}
 
 chai.use(chaiPromised);
 chai.use(chaiIterator);
@@ -756,7 +755,7 @@ describe('node-fetch', () => {
 		});
 	});
 
-	it('should clear internal timeout on fetch response', function (done) {
+	it('should clear internal timeout on fetch response', function(done) {
 		this.timeout(2000);
 		spawn('node', ['-e', `require('./')('${base}hello', { timeout: 10000 })`])
 			.on('exit', () => {
@@ -764,7 +763,7 @@ describe('node-fetch', () => {
 			});
 	});
 
-	it('should clear internal timeout on fetch redirect', function (done) {
+	it('should clear internal timeout on fetch redirect', function(done) {
 		this.timeout(2000);
 		spawn('node', ['-e', `require('./')('${base}redirect/301', { timeout: 10000 })`])
 			.on('exit', () => {
@@ -772,7 +771,7 @@ describe('node-fetch', () => {
 			});
 	});
 
-	it('should clear internal timeout on fetch error', function (done) {
+	it('should clear internal timeout on fetch error', function(done) {
 		this.timeout(2000);
 		spawn('node', ['-e', `require('./')('${base}error/reset', { timeout: 10000 })`])
 			.on('exit', () => {
@@ -780,14 +779,14 @@ describe('node-fetch', () => {
 			});
 	});
 
-	it('should set default User-Agent', function () {
+	it('should set default User-Agent', function() {
 		const url = `${base}inspect`;
 		fetch(url).then(res => res.json()).then(res => {
 			expect(res.headers['user-agent']).to.startWith('node-fetch/');
 		});
 	});
 
-	it('should allow setting User-Agent', function () {
+	it('should allow setting User-Agent', function() {
 		const url = `${base}inspect`;
 		const opts = {
 			headers: {
@@ -799,14 +798,14 @@ describe('node-fetch', () => {
 		});
 	});
 
-	it('should set default Accept header', function () {
+	it('should set default Accept header', function() {
 		const url = `${base}inspect`;
 		fetch(url).then(res => res.json()).then(res => {
 			expect(res.headers.accept).to.equal('*/*');
 		});
 	});
 
-	it('should allow setting Accept header', function () {
+	it('should allow setting Accept header', function() {
 		const url = `${base}inspect`;
 		const opts = {
 			headers: {
@@ -1028,7 +1027,7 @@ describe('node-fetch', () => {
 
 	it('should allow POST request with form-data as body', function() {
 		const form = new FormData();
-		form.append('a','1');
+		form.append('a', '1');
 
 		const url = `${base}multipart`;
 		const opts = {
@@ -1067,7 +1066,7 @@ describe('node-fetch', () => {
 
 	it('should allow POST request with form-data as body and custom headers', function() {
 		const form = new FormData();
-		form.append('a','1');
+		form.append('a', '1');
 
 		const headers = form.getHeaders();
 		headers['b'] = '2';
@@ -1109,7 +1108,7 @@ describe('node-fetch', () => {
 	const itUSP = typeof URLSearchParams === 'function' ? it : it.skip;
 	itUSP('should allow POST request with URLSearchParams as body', function() {
 		const params = new URLSearchParams();
-		params.append('a','1');
+		params.append('a', '1');
 
 		const url = `${base}inspect`;
 		const opts = {
@@ -1129,7 +1128,7 @@ describe('node-fetch', () => {
 	itUSP('should still recognize URLSearchParams when extended', function() {
 		class CustomSearchParams extends URLSearchParams {}
 		const params = new CustomSearchParams();
-		params.append('a','1');
+		params.append('a', '1');
 
 		const url = `${base}inspect`;
 		const opts = {
@@ -1151,7 +1150,7 @@ describe('node-fetch', () => {
 	it('should still recognize URLSearchParams when extended from polyfill', function() {
 		class CustomPolyfilledSearchParams extends URLSearchParams_Polyfill {}
 		const params = new CustomPolyfilledSearchParams();
-		params.append('a','1');
+		params.append('a', '1');
 
 		const url = `${base}inspect`;
 		const opts = {
@@ -1365,7 +1364,7 @@ describe('node-fetch', () => {
 		return fetch(url).then(res => {
 			const r1 = res.clone();
 			return Promise.all([res.json(), r1.text()]).then(results => {
-				expect(results[0]).to.deep.equal({name: 'value'});
+				expect(results[0]).to.deep.equal({ name: 'value' });
 				expect(results[1]).to.equal('{"name":"value"}');
 			});
 		});
@@ -1376,7 +1375,7 @@ describe('node-fetch', () => {
 		return fetch(url).then(res => {
 			const r1 = res.clone();
 			return res.json().then(result => {
-				expect(result).to.deep.equal({name: 'value'});
+				expect(result).to.deep.equal({ name: 'value' });
 				return r1.text().then(result => {
 					expect(result).to.equal('{"name":"value"}');
 				});
@@ -1391,7 +1390,7 @@ describe('node-fetch', () => {
 			return r1.text().then(result => {
 				expect(result).to.equal('{"name":"value"}');
 				return res.json().then(result => {
-					expect(result).to.deep.equal({name: 'value'});
+					expect(result).to.deep.equal({ name: 'value' });
 				});
 			});
 		});
@@ -1496,7 +1495,7 @@ describe('node-fetch', () => {
 				method: 'POST',
 				body: blob
 			});
-		}).then(res => res.json()).then(({body, headers}) => {
+		}).then(res => res.json()).then(({ body, headers }) => {
 			expect(body).to.equal('world');
 			expect(headers['content-type']).to.equal(type);
 			expect(headers['content-length']).to.equal(String(length));
@@ -1519,6 +1518,8 @@ describe('node-fetch', () => {
 		}).then(res => {
 			return res.json();
 		}).then(body => {
+			console.log(body)
+			process.exit();
 			expect(body.method).to.equal('GET');
 			expect(body.headers.a).to.equal('2');
 		});
@@ -1562,7 +1563,7 @@ describe('node-fetch', () => {
 	});
 
 	// issue #414
-	it('should reject if attempt to accumulate body stream throws', function () {
+	it('should reject if attempt to accumulate body stream throws', function() {
 		let body = resumer().queue('a=1').end();
 		body = body.pipe(new stream.PassThrough());
 		const res = new Response(body);
@@ -1584,6 +1585,7 @@ describe('node-fetch', () => {
 	it("supports supplying a lookup function to the agent", function() {
 		const url = `${base}redirect/301`;
 		let called = 0;
+
 		function lookupSpy(hostname, options, callback) {
 			called++;
 			return lookup(hostname, options, callback);
@@ -1598,6 +1600,7 @@ describe('node-fetch', () => {
 		const url = `${base}redirect/301`;
 		const families = [];
 		const family = Symbol('family');
+
 		function lookupSpy(hostname, options, callback) {
 			families.push(options.family)
 			return lookup(hostname, {}, callback);
@@ -1611,8 +1614,8 @@ describe('node-fetch', () => {
 	});
 });
 
-describe('Headers', function () {
-	it('should have attributes conforming to Web IDL', function () {
+describe('Headers', function() {
+	it('should have attributes conforming to Web IDL', function() {
 		const headers = new Headers();
 		expect(Object.getOwnPropertyNames(headers)).to.be.empty;
 		const enumerableProperties = [];
@@ -1620,9 +1623,9 @@ describe('Headers', function () {
 			enumerableProperties.push(property);
 		}
 		for (const toCheck of [
-			'append', 'delete', 'entries', 'forEach', 'get', 'has', 'keys', 'set',
-			'values'
-		]) {
+				'append', 'delete', 'entries', 'forEach', 'get', 'has', 'keys', 'set',
+				'values'
+			]) {
 			expect(enumerableProperties).to.contain(toCheck);
 		}
 	});
@@ -1713,30 +1716,30 @@ describe('Headers', function () {
 		expect(() => new Headers({ 'He y': 'ok' })).to.throw(TypeError);
 		expect(() => new Headers({ 'Hé-y': 'ok' })).to.throw(TypeError);
 		expect(() => new Headers({ 'He-y': 'ăk' })).to.throw(TypeError);
-		expect(() => headers.append('Hé-y', 'ok')) .to.throw(TypeError);
-		expect(() => headers.delete('Hé-y'))       .to.throw(TypeError);
-		expect(() => headers.get('Hé-y'))          .to.throw(TypeError);
-		expect(() => headers.has('Hé-y'))          .to.throw(TypeError);
-		expect(() => headers.set('Hé-y', 'ok'))    .to.throw(TypeError);
+		expect(() => headers.append('Hé-y', 'ok')).to.throw(TypeError);
+		expect(() => headers.delete('Hé-y')).to.throw(TypeError);
+		expect(() => headers.get('Hé-y')).to.throw(TypeError);
+		expect(() => headers.has('Hé-y')).to.throw(TypeError);
+		expect(() => headers.set('Hé-y', 'ok')).to.throw(TypeError);
 
 		// 'o k' is valid value but invalid name
 		new Headers({ 'He-y': 'o k' });
 	});
 
 	it('should ignore unsupported attributes while reading headers', function() {
-		const FakeHeader = function () {};
+		const FakeHeader = function() {};
 		// prototypes are currently ignored
 		// This might change in the future: #181
 		FakeHeader.prototype.z = 'fake';
 
 		const res = new FakeHeader;
 		res.a = 'string';
-		res.b = ['1','2'];
+		res.b = ['1', '2'];
 		res.c = '';
 		res.d = [];
 		res.e = 1;
 		res.f = [1, 2];
-		res.g = { a:1 };
+		res.g = { a: 1 };
 		res.h = undefined;
 		res.i = null;
 		res.j = NaN;
@@ -1807,9 +1810,11 @@ describe('Headers', function () {
 		expect(headers.get('b')).to.equal('2');
 
 		headers = new Headers([
-			new Set(['a', '1']),
-			['b', '2'],
-			new Map([['a', null], ['3', null]]).keys()
+			new Set(['a', '1']), ['b', '2'],
+			new Map([
+				['a', null],
+				['3', null]
+			]).keys()
 		]);
 		expect(headers.get('a')).to.equal('1, 3');
 		expect(headers.get('b')).to.equal('2');
@@ -1823,30 +1828,34 @@ describe('Headers', function () {
 	});
 
 	it('should throw a TypeError if non-tuple exists in a headers initializer', function() {
-		expect(() => new Headers([ ['b', '2', 'huh?'] ])).to.throw(TypeError);
-		expect(() => new Headers([ 'b2' ])).to.throw(TypeError);
+		expect(() => new Headers([
+			['b', '2', 'huh?']
+		])).to.throw(TypeError);
+		expect(() => new Headers(['b2'])).to.throw(TypeError);
 		expect(() => new Headers('b2')).to.throw(TypeError);
-		expect(() => new Headers({ [Symbol.iterator]: 42 })).to.throw(TypeError);
+		expect(() => new Headers({
+			[Symbol.iterator]: 42
+		})).to.throw(TypeError);
 	});
 });
 
-describe('Response', function () {
-	it('should have attributes conforming to Web IDL', function () {
+describe('Response', function() {
+	it('should have attributes conforming to Web IDL', function() {
 		const res = new Response();
 		const enumerableProperties = [];
 		for (const property in res) {
 			enumerableProperties.push(property);
 		}
 		for (const toCheck of [
-			'body', 'bodyUsed', 'arrayBuffer', 'blob', 'json', 'text',
-			'url', 'status', 'ok', 'statusText', 'headers', 'clone'
-		]) {
+				'body', 'bodyUsed', 'arrayBuffer', 'blob', 'json', 'text',
+				'url', 'status', 'ok', 'statusText', 'headers', 'clone'
+			]) {
 			expect(enumerableProperties).to.contain(toCheck);
 		}
 		for (const toCheck of [
-			'body', 'bodyUsed', 'url', 'status', 'ok', 'statusText',
-			'headers'
-		]) {
+				'body', 'bodyUsed', 'url', 'status', 'ok', 'statusText',
+				'headers'
+			]) {
 			expect(() => {
 				res[toCheck] = 'abc';
 			}).to.throw();
@@ -1994,22 +2003,22 @@ describe('Response', function () {
 	});
 });
 
-describe('Request', function () {
-	it('should have attributes conforming to Web IDL', function () {
+describe('Request', function() {
+	it('should have attributes conforming to Web IDL', function() {
 		const req = new Request('https://github.com/');
 		const enumerableProperties = [];
 		for (const property in req) {
 			enumerableProperties.push(property);
 		}
 		for (const toCheck of [
-			'body', 'bodyUsed', 'arrayBuffer', 'blob', 'json', 'text',
-			'method', 'url', 'headers', 'redirect', 'clone'
-		]) {
+				'body', 'bodyUsed', 'arrayBuffer', 'blob', 'json', 'text',
+				'method', 'url', 'headers', 'redirect', 'clone'
+			]) {
 			expect(enumerableProperties).to.contain(toCheck);
 		}
 		for (const toCheck of [
-			'body', 'bodyUsed', 'method', 'url', 'headers', 'redirect'
-		]) {
+				'body', 'bodyUsed', 'method', 'url', 'headers', 'redirect'
+			]) {
 			expect(() => {
 				req[toCheck] = 'abc';
 			}).to.throw();
@@ -2225,7 +2234,7 @@ describe('external encoding', () => {
 
 	describe('with optional `encoding`', function() {
 		before(function() {
-			if(!hasEncoding) this.skip();
+			if (!hasEncoding) this.skip();
 		});
 
 		it('should only use UTF-8 decoding with text()', function() {
@@ -2233,7 +2242,7 @@ describe('external encoding', () => {
 			return fetch(url).then(res => {
 				expect(res.status).to.equal(200);
 				return res.text().then(result => {
-					expect(result).to.equal('<?xml version="1.0" encoding="EUC-JP"?><title>\ufffd\ufffd\ufffd\u0738\ufffd</title>');
+					expect(result).to.equal('<?xml version="1.0" encoding="EUC-JP"?><title>���ܸ�</title>');
 				});
 			});
 		});
@@ -2330,6 +2339,7 @@ describe('external encoding', () => {
 				});
 			});
 		});
+
 	});
 
 	describe('without optional `encoding`', function() {

@@ -1,4 +1,3 @@
-
 /**
  * body.js
  *
@@ -10,7 +9,7 @@ import Blob, { BUFFER } from './blob.js';
 import FetchError from './fetch-error.js';
 
 let convert;
-try { convert = require('encoding').convert; } catch(e) {}
+try { convert = require('encoding').convert; } catch (e) {}
 
 const INTERNALS = Symbol('Body internals');
 
@@ -93,8 +92,7 @@ Body.prototype = {
 			// Prevent copying
 			new Blob([], {
 				type: ct.toLowerCase()
-			}),
-			{
+			}), {
 				[BUFFER]: buf
 			}
 		));
@@ -156,7 +154,7 @@ Object.defineProperties(Body.prototype, {
 	text: { enumerable: true }
 });
 
-Body.mixIn = function (proto) {
+Body.mixIn = function(proto) {
 	for (const name of Object.getOwnPropertyNames(Body.prototype)) {
 		// istanbul ignore else: future proof
 		if (!(name in proto)) {
@@ -402,7 +400,7 @@ export function clone(instance) {
  * @param   Mixed  instance  Response or Request instance
  */
 export function extractContentType(instance) {
-	const {body} = instance;
+	const { body } = instance;
 
 	// istanbul ignore if: Currently, because of a guard in Request, body
 	// can never be null. Included here for completeness.
@@ -413,7 +411,7 @@ export function extractContentType(instance) {
 		// body is string
 		return 'text/plain;charset=UTF-8';
 	} else if (isURLSearchParams(body)) {
-	 	// body is a URLSearchParams
+		// body is a URLSearchParams
 		return 'application/x-www-form-urlencoded;charset=UTF-8';
 	} else if (body instanceof Blob) {
 		// body is blob
@@ -447,7 +445,7 @@ export function extractContentType(instance) {
  * @return  Number?            Number of bytes, or null if not possible
  */
 export function getTotalBytes(instance) {
-	const {body} = instance;
+	const { body } = instance;
 
 	// istanbul ignore if: included for completion
 	if (body === null) {
@@ -492,7 +490,7 @@ export function getTotalBytes(instance) {
  * @return  Void
  */
 export function writeToStream(dest, instance) {
-	const {body} = instance;
+	const { body } = instance;
 
 	if (body === null) {
 		// body is null

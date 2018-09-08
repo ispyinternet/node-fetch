@@ -1,4 +1,3 @@
-
 /**
  * index.js
  *
@@ -77,7 +76,12 @@ export default function fetch(url, opts) {
 				const location = headers.get('Location');
 
 				// HTTP fetch step 5.3
-				const locationURL = location === null ? null : resolve_url(request.url, location);
+				let locationURL = location === null ? null : resolve_url(request.url, location);
+
+				if (req.socketPath) {
+					// NOT SURE IF THIS IS NEEDED DOESNT SEEM TO FIX FAILING REDIRECT TEST
+					locationURL = locationURL.replace('127.0.0.1', `unix:${req.socketPath}:`);
+				}
 
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
@@ -128,6 +132,10 @@ export default function fetch(url, opts) {
 							requestOpts.method = 'GET';
 							requestOpts.body = undefined;
 							requestOpts.headers.delete('content-length');
+						}
+
+						if (req.socketPath) {
+							requestOpts.socketPath = req.socketPath;
 						}
 
 						// HTTP-redirect fetch step 15
