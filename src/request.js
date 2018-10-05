@@ -46,7 +46,10 @@ function pre_parse_url(url) {
 
 	let matches = url.match(/(^https?:)\/\/unix:(.+):(.*)/)
 
+	console.log(url)
+
 	if (matches) {
+
 		// unix socket
 		let protocol = matches[1]
 		let socketPath = matches[2]
@@ -60,7 +63,7 @@ function pre_parse_url(url) {
 	} else {
 		parsedURL = parse_url(url)
 	}
-
+	console.log(parsedURL);
 	return parsedURL
 }
 
